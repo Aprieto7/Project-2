@@ -1,6 +1,11 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, jsonify
+import os.path
+import pandas as pd
+import requests as r
 from flask_pymongo import PyMongo
-from scrape import scrape_info
+import sqlalchemy
+
+engine=sqlalchemy.create_engine('sqlite:///data.db')
 
 # Create an instance of Flask
 app = Flask(__name__)
@@ -15,11 +20,15 @@ mongo = PyMongo(app, uri="mongodb://localhost:27017/app_name")
 def home():
 
     # # Find one record of data from the mongo database
-    return_data=mongo.db.collection.find_one()
-    print(return_data.keys())
 
     # # Return template and data
-    return render_template("index.html", return_data=return_data)
+    return render_template("index.html")
+
+@app.route("/data")
+def jsonified():
+    
+    
+
 
 if __name__ == "__main__":
     app.run(debug=True)
