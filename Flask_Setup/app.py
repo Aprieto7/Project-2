@@ -45,7 +45,8 @@ def jsonified():
              "vaccinesAdministered": [5]
              }
         historical.append(x)
-
+    return jsonify(historical)
+    
     rows = engine.execute("SELECT state, cases, deaths, positiveTests, newCases, vaccinesDistributed, vaccinationsInitiated, vaccinationsCompleted, vaccinesAdministered, lat, long")
     states = []
     for row in rows:
@@ -62,6 +63,7 @@ def jsonified():
             "long": row[11]
             }
         states.append(x)
+    return jsonify(states)
 
 if __name__ == "__main__":
     app.run(debug=True)
