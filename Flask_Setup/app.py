@@ -36,7 +36,7 @@ def jsonified():
 
     rows = engine.execute(
         "SELECT date, cases, deaths, newCases, vaccinesAdministered FROM historical")
-    res1 = []
+    historical = []
     for row in rows:
         x = {"date": row[1],
              "cases": row[2],
@@ -44,10 +44,10 @@ def jsonified():
              "newCases": row[4],
              "vaccinesAdministered": [5]
              }
-        res1.append(x)
+        historical.append(x)
 
     rows = engine.execute("SELECT state, cases, deaths, positiveTests, newCases, vaccinesDistributed, vaccinationsInitiated, vaccinationsCompleted, vaccinesAdministered, lat, long")
-    res2 = []
+    states = []
     for row in rows:
         x = {"state": row[1],
             "cases": row[2],
@@ -61,7 +61,7 @@ def jsonified():
             "lat": row[10],
             "long": row[11]
             }
-        res2.append(x)
+        states.append(x)
 
 if __name__ == "__main__":
     app.run(debug=True)
