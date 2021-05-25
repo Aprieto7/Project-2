@@ -31,7 +31,7 @@ def home():
     return render_template("index.html")
 
 
-@app.route("/data")
+@app.route("/historicalData")
 def jsonified():
 
     rows = engine.execute(
@@ -47,6 +47,8 @@ def jsonified():
         historical.append(x)
     return jsonify(historical)
     
+@app.route("/stateData")
+def jsonified():
     rows = engine.execute("SELECT state, cases, deaths, positiveTests, newCases, vaccinesDistributed, vaccinationsInitiated, vaccinationsCompleted, vaccinesAdministered, lat, long")
     states = []
     for row in rows:
