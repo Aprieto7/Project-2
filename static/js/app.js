@@ -17,7 +17,7 @@ var queryUrlCbsas = `https://api.covidactnow.org/v2/cbsas.json?apiKey=${API_KEY}
 // d3.select(window).on('resize', makeResponsive);
 
 function buildCharts(vaccination) {
-    d3.json("data/covid.db").then((Data) => {
+    d3.json("/historicalData").then((Data) => {
     //Point to the vaccination portion of the data file
         var vaccinations = Data.vaccinations;
 
