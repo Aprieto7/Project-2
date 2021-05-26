@@ -16,13 +16,27 @@ var queryUrlCbsas = `https://api.covidactnow.org/v2/cbsas.json?apiKey=${API_KEY}
 // // When the browser window is resized, makeResponsive() is called.
 // d3.select(window).on('resize', makeResponsive);
 
+
+
 function buildCharts(vaccination) {
-    d3.json("data/covid.db").then((Data) => {
+    d3.json("/stateData").then((Data) => {
   //Point to the vaccination portion of the data file
       var vaccinations = Data.vaccinations;
 
       var resultArray = vaccinations.filter(vaccination => vaccination == vaccinations);
       var result = resultArray[0];
+
+      var stateList = Data.state;
+      var dropdownMenu = de.selectAll("#selDataset");
+      stateList.forEach(function (state) {
+        dropdownMenu.append("option").text(state)
+        .property("value", state)
+      });
+
+      myBarChart(stateList[0])
+      myAreaChart(stateList[0])
+      myGauge(stateList[0])
+      myMap(stateList[0])
 
   //assign the otu_ids, sample_values, and otu_labels to variables to use in plots
       var states = result.state;
@@ -89,3 +103,112 @@ function init() {
   
 init();
     })}
+
+
+
+
+  var svgWidth = 960;
+  var svgHeight = 500;
+
+  var margin = {
+      top: 20,
+      right: 40,
+      bottom: 60,
+      left: 50
+  };
+
+  var width = svgWidth - margin.left - margin.right;
+  var height = svgHeight - margin.top - margin.bottom;
+
+  // Step 2: Create an SVG wrapper,
+  // append an SVG group that will hold our chart,
+  // and shift the latter by left and top margins.
+  // =================================
+  var svg = d3
+      .select("#myBarChart")
+      .append("svg")
+      .attr("width", svgWidth)
+      .attr("height", svgHeight);
+
+  var chartGroup = svg.append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+  // d3.csv("donuts.csv").then(function(donutData) { 
+
+  function buildCharts(value) {
+      var vaccinations = Data.vaccinesAdministered;
+      var date = Data.date
+      d3.json("/historicalData").then(function (Data) {
+          //Point to the vaccination portion of the data file
+
+
+          Data.forEach(function (Data) {
+              var resultArray = vaccinesAdministered.filter(state => state == state);
+              var result = resultArray[0];
+
+              //assign the otu_ids, sample_values, and otu_labels to variables to use in plots
+              var states = result.state;
+              var vaccinesAdministered = result.vaccinesAdministered;
+              var cases = result.cases;
+              var date = result.date;
+          });
+
+          var xLinearScale = d3.scaleLinear()
+              .domain(d3.max(Data, d => d.date))
+              .range([0, width]);
+
+          var yLinearScale1 = d3.scaleLinear()
+              .domain([0, d3.max(Data, d => d.vaccinesAdministered)])
+              .range([height, 0]);
+
+          var yLinearScale2 = d3.scaleLinear()
+              .domain([0, d3.max(Data, d => d.cases)])
+              .range([height, 0]);
+
+          var bottomAxis = d3.axisBottom(xLinearScale);
+          var leftAxis = d3.axisLeft(yLinearScale1);
+          var rightAxis = d3.axisRight(yLinearScale2);
+
+          chartGroup.append("g").attr("transform", `translate(0, ${height})`).call(bottomAxis);
+
+          // Add leftAxis to the left side of the display
+          chartGroup.append("g").call(leftAxis);
+
+          // Add rightAxis to the right side of the display
+          chartGroup.append("g").attr("transform", `translate(${width}, 0)`).call(rightAxis);
+
+          var line1 = d3
+              .line()
+              .x(d => xLinearScale(d.date))
+              .y(d => yLinearScale1(d.vaccinesAdministered));
+
+          var line2 = d3
+              .line()
+              .x(d => xLinearScale(d.date))
+              .y(d => yLinearScale2(d.cases));
+
+
+          // Append a path for line1
+          chartGroup.append("#myBarChart")
+              .data([Data])
+              .attr("d", line1)
+              .attr("color", "green")
+
+          // Append a path for line2
+          chartGroup.append("myBarChart")
+              .data([Data])
+              .attr("d", line2)
+              .attr("color", "red")
+
+      }).catch(function (error) {
+          console.log(error);
+      })
+}
+
+function optionChanged(value) {
+    myBarChart(value)
+      myAreaChart(value)
+      myGauge(value)
+      myMap(value)
+
+}

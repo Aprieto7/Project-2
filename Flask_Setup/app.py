@@ -35,7 +35,7 @@ def home():
 def jsonified1():
 
     rows = engine.execute(
-        "SELECT date, cases, deaths, newCases, vaccinesAdministered FROM hist_vaccine_table")
+        "SELECT date, state, cases, deaths, newCases, vaccinesAdministered FROM hist_vaccine_table")
     historical = []
     for row in rows:
         x = {"date": row[0],
@@ -43,7 +43,7 @@ def jsonified1():
              "cases": row[2],
              "deaths": row[3],
              "newCases": row[4],
-             "vaccinesAdministered": [5]
+             "vaccinesAdministered": row[5]
              }
         historical.append(x)
     return jsonify(historical)
