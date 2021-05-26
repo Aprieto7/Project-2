@@ -39,10 +39,11 @@ def jsonified1():
     historical = []
     for row in rows:
         x = {"date": row[0],
-             "cases": row[1],
-             "deaths": row[2],
-             "newCases": row[3],
-             "vaccinesAdministered": [4]
+            "state": row[1],
+             "cases": row[2],
+             "deaths": row[3],
+             "newCases": row[4],
+             "vaccinesAdministered": [5]
              }
         historical.append(x)
     return jsonify(historical)
