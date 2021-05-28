@@ -2,7 +2,7 @@ from flask import Flask, render_template, jsonify
 import os.path
 import pandas as pd
 import requests as r
-from flask_pymongo import PyMongo
+# from flask_pymongo import PyMongo
 import sqlalchemy
 
 engine = sqlalchemy.create_engine('sqlite:///../data/covid.db')
@@ -63,10 +63,12 @@ def jsonified2():
             "vaccinationsCompleted": row[7],
             "vaccinesAdministered": row[8],
             "lat": row[9],
-            "long": row[10]
+            "long": row[10],
+            "pop": row[11]
             }
         states.append(x)
     return jsonify(states)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
