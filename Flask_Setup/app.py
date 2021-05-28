@@ -50,7 +50,7 @@ def jsonified1():
     
 @app.route("/stateData")
 def jsonified2():
-    rows = engine.execute("SELECT state, cases, deaths, positiveTests, newCases, vaccinesDistributed, vaccinationsInitiated, vaccinationsCompleted, vaccinesAdministered, lat, long FROM states_totals_table" )
+    rows = engine.execute("SELECT state, cases, deaths, positiveTests, newCases, vaccinesDistributed, vaccinationsInitiated, vaccinationsCompleted, vaccinesAdministered, lat, long, population FROM states_totals_table" )
     states = []
     for row in rows:
         x = {"state": row[0],
@@ -64,7 +64,7 @@ def jsonified2():
             "vaccinesAdministered": row[8],
             "lat": row[9],
             "long": row[10],
-            "pop": row[11]
+            "population": row[11]
             }
         states.append(x)
     return jsonify(states)
