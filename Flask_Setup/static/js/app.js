@@ -54,7 +54,7 @@ function gaugeChart(value) {
         type: 'indicator',
         mode: 'gauge+number',
         gauge: {
-          bar: {color: "blue"},
+          bar: { color: "blue" },
           axis: {
             range: [null, 100],
             tickwidth: 2,
@@ -62,10 +62,10 @@ function gaugeChart(value) {
             dtick: 10
           },
           steps: [
-            {range: [0, 25], color: 'red'},
+            { range: [0, 25], color: 'red' },
             { range: [25, 50], color: 'orange' },
             { range: [50, 75], color: 'yellow' },
-            {range: [75, 100], color: 'green'}
+            { range: [75, 100], color: 'green' }
           ],
           threshold: {
             line: { color: 'gold', width: 4 },
@@ -79,178 +79,185 @@ function gaugeChart(value) {
     var layout = { width: 600, height: 450, margin: { t: 0, b: 0 } };
 
     Plotly.newPlot('myGauge', data, layout);
-
-    //Stacked Bar Chart
-
-
-    
-    var trace1 = {
-      x: state,
-      y: vaccinationsAdministered,
-      name: 'Vaccinations Administered',
-      type: 'bar'
-    };
-
-    var trace2 = {
-      x: state,
-      y: vaccinationsDistributed,
-      name: 'Vaccinations Distributed',
-      type: 'bar'
-    };
-
-    var data = [trace1, trace2];
-
-    var layout = { barmode: 'stack' };
-
-    Plotly.newPlot('myAreaChart', data, layout);
-
-
-
   })
 }
+//Stacked Bar Chart
 
-
-
-
-// var svgWidth = 960;
-// var svgHeight = 500;
-
-// var margin = {
-//   top: 20,
-//   right: 40,
-//   bottom: 60,
-//   left: 50
-// };
-
-// var width = svgWidth - margin.left - margin.right;
-// var height = svgHeight - margin.top - margin.bottom;
-
-// // Step 2: Create an SVG wrapper,
-// // append an SVG group that will hold our chart,
-// // and shift the latter by left and top margins.
-// // =================================
-// var svg = d3
-//   .select("#myBarChart")
-//   .append("svg")
-//   .attr("width", svgWidth)
-//   .attr("height", svgHeight);
-
-// var chartGroup = svg.append("g")
-//   .attr("transform", `translate(${margin.left}, ${margin.top})`);
-
-// // d3.csv("donuts.csv").then(function(donutData) { 
-
-// function buildCharts(filteredState) {
-
-//   d3.json("/stateData").then((Data) => {
-//     //Point to the vaccination portion of the data file
-//     var vaccinations = Data.vaccinesAdministered;
-//     console.log(vaccinations)
-
-//     Data.forEach(function (d) {
-//       var vaccinesAdministered = d.vaccinesAdministered;
-//       // var resultArray = vaccinesAdministered.filter(state => state == state);
-//       // var result = resultArray[0];
-
-//       //assign the otu_ids, sample_values, and otu_labels to variables to use in plots
-//       var states = d.state;
-//       var cases = d.cases;
-//       var date = d.date;
-//     });
-
-//     var xLinearScale = d3.scaleLinear()
-//       .domain(d3.max(Data, d => d.date))
-//       .range([0, width]);
-
-//     var yLinearScale1 = d3.scaleLinear()
-//       .domain([0, d3.max(Data, d => d.vaccinesAdministered)])
-//       .range([height, 0]);
-
-//     var yLinearScale2 = d3.scaleLinear()
-//       .domain([0, d3.max(Data, d => d.cases)])
-//       .range([height, 0]);
-
-//     var bottomAxis = d3.axisBottom(xLinearScale);
-//     var leftAxis = d3.axisLeft(yLinearScale1);
-//     var rightAxis = d3.axisRight(yLinearScale2);
-
-//     chartGroup.append("g").attr("transform", `translate(0, ${height})`).call(bottomAxis);
-
-//     // Add leftAxis to the left side of the display
-//     chartGroup.append("g").call(leftAxis);
-
-//     // Add rightAxis to the right side of the display
-//     chartGroup.append("g").attr("transform", `translate(${width}, 0)`).call(rightAxis);
-
-//     var line1 = d3
-//       .line()
-//       .x(d => xLinearScale(d.date))
-//       .y(d => yLinearScale1(d.vaccinesAdministered));
-
-//     var line2 = d3
-//       .line()
-//       .x(d => xLinearScale(d.date))
-//       .y(d => yLinearScale2(d.cases));
-
-
-//     // Append a path for line1
-//     chartGroup.append("#myBarChart")
-//       .data([Data])
-//       .attr("d", line1)
-//       .attr("color", "green")
-
-//     // Append a path for line2
-//     chartGroup.append("myBarChart")
-//       .data([Data])
-//       .attr("d", line2)
-//       .attr("color", "red")
-
-
-
-
-
-function optionChanged(value) {
-  filteredState = myStateData.filter(d => d.state == value)
-  console.log(filteredState)
-  // myBarChart(filteredState)
-  // myAreaChart(filteredState)
-  gaugeChart(value)
-
-
-}
-myStateData = [];
-
-function init() {
-  // call the functions to display the data and the plots to the page
-  d3.json("/historicalData").then(function (Data) {
-    //Point to the vaccination portion of the data file
-    myStateData = Data;
-    filteredState = myStateData.filter(d => d.state == "TX")
-    gaugeChart("TX");
-    // myBarChart(filteredState)
-    // myAreaChart(filteredState)
-    // myMap();
-
-  }
-  );
+function myAreaChart(value) {
   d3.json("/stateData").then((Data) => {
-    //Point to the vaccination portion of the data file
-    // var vaccinations = Data.vaccinesAdministered;
-    // console.log(vaccinations)
+    var resultArray = Data.filter(d => d.state == value);
+    var result = resultArray[0];
+    var state = result.state
+    var vaccinationsCompleted = result.vaccinationsCompleted;
+    var vaccinationsDistributed = result.vaccinesDistributed;
+    var vaccinationsAdministered = result.vaccinesAdministered;
+    var unused = vaccinationsDistributed-vaccinationsAdministered;
+    var trace1 = [{
+      values: [vaccinationsAdministered, unused],
+      labels: ["Vaccinations Administered", "Unused Vaccines"],
+      type: 'pie'
+    }];
 
-    // var resultArray = vaccinations.filter(vaccination => vaccination == vaccinations);
-    // var result = resultArray[0];
-    console.log(Data)
-    var stateList = Data.map(d => d.state);
-    var dropdownMenu = d3.selectAll("#selDataset");
-    stateList.forEach(function (state) {
-      dropdownMenu.append("option").text(state)
-        .property("value", state)
-    });
-  });
-}
+    // var trace2 = {
+    //   x: state,
+    //   y: vaccinationsDistributed,
+    //   text: state,
+    //   name: 'Vaccinations Distributed',
+    //   type: 'bar'
+    // };
+
+  
+    var layout = { 
+      height: 500,
+       width: 500 };
+
+    Plotly.newPlot('myAreaChart', trace1, layout);
+
+  })}
 
 
-init();
 
+
+
+
+    // var svgWidth = 960;
+    // var svgHeight = 500;
+
+    // var margin = {
+    //   top: 20,
+    //   right: 40,
+    //   bottom: 60,
+    //   left: 50
+    // };
+
+    // var width = svgWidth - margin.left - margin.right;
+    // var height = svgHeight - margin.top - margin.bottom;
+
+    // // Step 2: Create an SVG wrapper,
+    // // append an SVG group that will hold our chart,
+    // // and shift the latter by left and top margins.
+    // // =================================
+    // var svg = d3
+    //   .select("#myBarChart")
+    //   .append("svg")
+    //   .attr("width", svgWidth)
+    //   .attr("height", svgHeight);
+
+    // var chartGroup = svg.append("g")
+    //   .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    // // d3.csv("donuts.csv").then(function(donutData) { 
+
+    // function buildCharts(filteredState) {
+
+    //   d3.json("/stateData").then((Data) => {
+    //     //Point to the vaccination portion of the data file
+    //     var vaccinations = Data.vaccinesAdministered;
+    //     console.log(vaccinations)
+
+    //     Data.forEach(function (d) {
+    //       var vaccinesAdministered = d.vaccinesAdministered;
+    //       // var resultArray = vaccinesAdministered.filter(state => state == state);
+    //       // var result = resultArray[0];
+
+    //       //assign the otu_ids, sample_values, and otu_labels to variables to use in plots
+    //       var states = d.state;
+    //       var cases = d.cases;
+    //       var date = d.date;
+    //     });
+
+    //     var xLinearScale = d3.scaleLinear()
+    //       .domain(d3.max(Data, d => d.date))
+    //       .range([0, width]);
+
+    //     var yLinearScale1 = d3.scaleLinear()
+    //       .domain([0, d3.max(Data, d => d.vaccinesAdministered)])
+    //       .range([height, 0]);
+
+    //     var yLinearScale2 = d3.scaleLinear()
+    //       .domain([0, d3.max(Data, d => d.cases)])
+    //       .range([height, 0]);
+
+    //     var bottomAxis = d3.axisBottom(xLinearScale);
+    //     var leftAxis = d3.axisLeft(yLinearScale1);
+    //     var rightAxis = d3.axisRight(yLinearScale2);
+
+    //     chartGroup.append("g").attr("transform", `translate(0, ${height})`).call(bottomAxis);
+
+    //     // Add leftAxis to the left side of the display
+    //     chartGroup.append("g").call(leftAxis);
+
+    //     // Add rightAxis to the right side of the display
+    //     chartGroup.append("g").attr("transform", `translate(${width}, 0)`).call(rightAxis);
+
+    //     var line1 = d3
+    //       .line()
+    //       .x(d => xLinearScale(d.date))
+    //       .y(d => yLinearScale1(d.vaccinesAdministered));
+
+    //     var line2 = d3
+    //       .line()
+    //       .x(d => xLinearScale(d.date))
+    //       .y(d => yLinearScale2(d.cases));
+
+
+    //     // Append a path for line1
+    //     chartGroup.append("#myBarChart")
+    //       .data([Data])
+    //       .attr("d", line1)
+    //       .attr("color", "green")
+
+    //     // Append a path for line2
+    //     chartGroup.append("myBarChart")
+    //       .data([Data])
+    //       .attr("d", line2)
+    //       .attr("color", "red")
+
+
+
+
+
+    function optionChanged(value) {
+      filteredState = myStateData.filter(d => d.state == value)
+      console.log(filteredState)
+      // myBarChart(filteredState)
+      myAreaChart(value)
+      gaugeChart(value)
+
+
+    }
+    myStateData = [];
+
+    function init() {
+      // call the functions to display the data and the plots to the page
+      d3.json("/historicalData").then(function (Data) {
+        //Point to the vaccination portion of the data file
+        myStateData = Data;
+        filteredState = myStateData.filter(d => d.state == "TX")
+        gaugeChart("TX");
+        // myBarChart(filteredState)
+        myAreaChart("TX")
+        // myMap();
+
+      }
+      );
+      d3.json("/stateData").then((Data) => {
+        //Point to the vaccination portion of the data file
+        // var vaccinations = Data.vaccinesAdministered;
+        // console.log(vaccinations)
+
+        // var resultArray = vaccinations.filter(vaccination => vaccination == vaccinations);
+        // var result = resultArray[0];
+        console.log(Data)
+        var stateList = Data.map(d => d.state);
+        var dropdownMenu = d3.selectAll("#selDataset");
+        stateList.forEach(function (state) {
+          dropdownMenu.append("option").text(state)
+            .property("value", state)
+        });
+      });
+    }
+
+
+    init();
 
