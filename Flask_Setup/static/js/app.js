@@ -18,8 +18,13 @@ var queryUrlCbsas = `https://api.covidactnow.org/v2/cbsas.json?apiKey=${API_KEY}
 
 var state = []
 
+function percentage(a,b) {
+  var percent = a*100/b;
+  return percent
+}
+
 function gaugeChart(value) {
-  d3.json("/stateData").then((Data) => {
+  d3.json("/stateData").then ((Data) => {
     //Point to the vaccination portion of the data file
     // var vaccinations = Data.vaccinesAdministered;
     // console.log(vaccinations)
@@ -29,9 +34,11 @@ function gaugeChart(value) {
     //     data.long = +data.long;
     //     data.cases = +data.cases;
     //     data.deaths = +data.deaths;
-    //     data.population = +data
-    //   })
-    // }
+    //     data.population = parseFloat(data.population.replace(',','').replace(',',''));
+    //     data.population = +(data.population);
+       
+    //   });
+    
     var resultArray = Data.filter(d => d.state == value);
     var result = resultArray[0];
 
@@ -52,14 +59,15 @@ function gaugeChart(value) {
     var vaccinationsCompleted = result.vaccinationsCompleted;
     var vaccinationsDistributed = result.vaccinesDistributed;
     var vaccinationsAdministered = result.vaccinesAdministered;
-    var population = +result.population;
-    var percentage = (vaccinationsCompleted/population)*100
+    var population = parseFloat(result.population.replace(',','').replace(',',''));
+    
+    var percent = percentage(vaccinationsCompleted,population)
   // var percentage
     //Create Gauge Chart 
     var data = [
       {
         domain: { x: [0, 1], y: [0, 1] },
-        value: percentage,
+        value: percent,
         title: { text: 'Fully Vaccinated Percentage' },
         type: 'indicator',
         mode: 'gauge+number',
