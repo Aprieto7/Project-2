@@ -69,6 +69,11 @@ def jsonified2():
         states.append(x)
     return jsonify(states)
 
+@app.route("/map")
+def map():
+
+    # # Return template and data
+    return render_template("map.html")
 
 if __name__ == "__main__":
     app.run(debug=True)

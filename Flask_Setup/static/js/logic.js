@@ -41,28 +41,32 @@ function colorScale(x) {
 
 
 // Each city object contains the city's name, location and population
-d3.csv("/stateData").then(
+d3.json("/stateData").then(
   function(coordinateData) {
   coordinateData.forEach(function(data) {
       data.lat = +data.lat;
       data.long = +data.long;
       data.cases = +data.cases;
       data.deaths = +data.deaths;
-      data.population = +data.population 
+      data.population = parseFloat(data.population.replace(',','').replace(',',''));
+      data.population = +(data.population);
+      //console.log(data.population) 
   });
   console.log(coordinateData);
   // Loop through the cities array and create one marker for each city object
   for (var i = 0; i < coordinateData.length; i++) {
     var latlong = [coordinateData[i].lat,coordinateData[i].long];
     var casePer = percentage(coordinateData[i].cases,coordinateData[i].population);
-    var deathPer = percentage(coordinateData[i].deaths,coordinateData[i].population)
+    //console.log(casePer);
+    var deathPer = percentage(coordinateData[i].deaths,coordinateData[i].population);
+    //console.log(deathPer);
     L.circleMarker(latlong, {
       fillOpacity: 0.4,
       color: "gray",
       fillColor: colorScale(deathPer),
       // Adjust radius
       radius: casePer
-    }).bindPopup("<h3>" + coordinateData[i].name + "</h3> <hr> <h4>Cases Percent: " + casePer.toFixed(2) + "%</h4> <r> <h4>Death Percent: " + deathPer.toFixed(2) + "%</h4>").addTo(myMap);
+    }).bindPopup("<h3>" + coordinateData[i].state + "</h3> <hr> <h4>Cases Percent: " + casePer.toFixed(2) + "%</h4> <r> <h4>Death Percent: " + deathPer.toFixed(2) + "%</h4>").addTo(myMap);
   }
 
   // Create legend 
