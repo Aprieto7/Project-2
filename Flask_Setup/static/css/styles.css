@@ -4427,6 +4427,13 @@ input[type=button].btn-block {
   background-color: rgb(253, 253, 253);
   border-bottom: 1px solid rgb(255, 255, 255);
 }
+
+.card-header1 {
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 0;
+  background-color: rgb(143, 179, 245);
+  border-bottom: 1px solid rgb(255, 255, 255);
+}
 .card-header:first-child {
   border-radius: calc(0.25rem - 1px) calc(0.25rem - 1px) 0 0;
 }
