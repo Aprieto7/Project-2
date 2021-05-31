@@ -93,14 +93,14 @@ function myBarChart(value) {
     svgArea.remove();
   }
 
-  var svgWidth = window.innerWidth - 50;
+  var svgWidth = window.innerWidth;
   var svgHeight = 500;
 
   var margin = {
     top: 20,
-    right: 40,
-    bottom: 60,
-    left: 100
+    right: 100,
+    bottom: 80,
+    left: 150
   };
 
   var width = svgWidth - margin.left - margin.right;
@@ -140,10 +140,10 @@ function myBarChart(value) {
     chartGroup.append("g").attr("transform", `translate(0, ${height})`).call(bottomAxis);
 
     // Add leftAxis to the left side of the display
-    chartGroup.append("g").call(leftAxis);
+    chartGroup.append("g").attr("stroke", "green").call(leftAxis);
 
     // Add rightAxis to the right side of the display
-    chartGroup.append("g").attr("transform", `translate(${width}, 0)`).call(rightAxis);
+    chartGroup.append("g").attr("transform", `translate(${width}, 0)`).attr("stroke", "red").call(rightAxis);
 
     var line1 = d3
       .line()
@@ -171,6 +171,24 @@ function myBarChart(value) {
       .attr("d", line2)
       .attr("fill", "none")
       .attr("stroke", "red");
+
+      chartGroup.append("text")
+      // Position the text
+      // Center the text:
+      // (https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/text-anchor)
+      .attr("transform", `translate(${width / 2}, ${height + margin.top +20})`)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "16px")
+      .attr("fill", "green")
+      .text("COVID Vaccinations");
+  
+    chartGroup.append("text")
+      .attr("transform", `translate(${width / 2}, ${height + margin.top + 40})`)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "16px")
+      .attr("fill", "red")
+      .text("Daily New COVID Cases");
+ 
   });
 }
 

@@ -44,10 +44,11 @@
     <div class="jumbotron jumbotron-fluid">
         <div class="container">
             <center><h1 class="display-3">COVID Vaccinations in the U.S.</center></h1>
-            <p class="lead">Choose a State below for more information</p> <br><br>
             <p class="authors">powered by: #knust/nguyen/prieto/sanguino<br> @rice2021</p>
+            
             <div class="card mb-4">
                 <div class="card-header1">
+                    <p class="lead">Choose a State below for more information</p>
                     <div class="dropdown">
                         <h5>State:</h5>
                         <select id="selDataset" onchange="optionChanged(this.value)"></select>
@@ -62,7 +63,7 @@
 
     <div class="row">
         <div class="col-md-6">
-            <div class="card mb-4">
+            <div class="card mb-6">
                 <div class="card-header">
                     <i class="fas fa-chart-area mr-1"></i>
                     <strong>Vaccinations Distributed vs Vaccinations Administered per State</strong>
@@ -71,7 +72,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card mb-4">
+            <div class="card mb-6">
                 <div class="card-header">
                     <i class="fas fa-chart-gauge mr-1"></i>
                     <strong>Percentage of population vaccinated in the state</strong    >
@@ -86,7 +87,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="card mb-4">
+            <div class="card mb-12">
                 <div class="card-header">
                     <i class="fas fa-chart-bar mr-1"></i>
                     <center><strong>New Cases vs. Vaccinations</strong></center>
