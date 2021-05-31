@@ -177,12 +177,17 @@ function myAreaChart(value) {
         console.log(vaccinations)
 
           //assign the otu_ids, sample_values, and otu_labels to variables to use in plot
+          // var parseTime = d3.timeParse("%Y %m %d");
+
           var newCases = result.newCases;
-          var date = (result.date).parse;
+          var dates = (result.date);
+          // var date = dates.push(parseTime(dates));
+          var date = Date.parse(dates)
+          
         
 
-        var xLinearScale = d3.scaleLinear()
-          .domain(d3.max(date))
+        var xScale = d3.scaleTime()
+          .domain(d3.extent(date))
           .range([0, width]);
 
         var yLinearScale1 = d3.scaleLinear()
@@ -193,7 +198,7 @@ function myAreaChart(value) {
           .domain([0, d3.max(newCases)])
           .range([height, 0]);
 
-        var bottomAxis = d3.axisBottom(xLinearScale);
+        var bottomAxis = d3.axisBottom(xScale);
         var leftAxis = d3.axisLeft(yLinearScale1);
         var rightAxis = d3.axisRight(yLinearScale2);
 
@@ -207,24 +212,26 @@ function myAreaChart(value) {
 
         var line1 = d3
           .line()
-          .x(d => xLinearScale(date))
+          .x(d => xScale(date))
           .y(d => yLinearScale1(vaccinations));
 
         var line2 = d3
           .line()
-          .x(d => xLinearScale(date))
+          .x(xScale(date))
           .y(d => yLinearScale2(newCases));
 
 
         // Append a path for line1
-        chartGroup.append("myBarChart")
-          .data([Data])
+        chartGroup
+          .append("path")
+          .data([date, vaccinations])
           .attr("d", line1)
           .attr("color", "green")
 
         // Append a path for line2
-        chartGroup.append("myBarChart")
-          .data([Data])
+        chartGroup
+          .append("path")
+          .data([date, newCases])
           .attr("d", line2)
           .attr("color", "red")
           
