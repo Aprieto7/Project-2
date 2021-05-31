@@ -134,10 +134,10 @@ function myAreaChart(value) {
 
   })}
 
-
-
-
-
+    // var svgArea = d3.select("#myBarChart").select("svg");
+    // if (!svgArea.empty()) {
+    //   svgArea.remove();
+    // }
 
     var svgWidth = 960;
     var svgHeight = 500;
@@ -156,6 +156,7 @@ function myAreaChart(value) {
     // append an SVG group that will hold our chart,
     // and shift the latter by left and top margins.
     // =================================
+
     var svg = d3
       .select("#myBarChart")
       .append("svg")
@@ -170,32 +171,34 @@ function myAreaChart(value) {
     function myBarChart(value) {
 
       d3.json("/historicalData").then((Data) => {
-        var resultArray = Data.filter(d => d.state == value);
-        var result = resultArray[0];
-        var state = result.state
-        var vaccinations = result.vaccinesAdministered;
-        console.log(vaccinations)
-
+        var filterArray = Data.filter(d => d.state == value);
+        // var result = resultArray[0];
+        // var state = result.state
+        // var vaccinations = result.vaccinesAdministered;
+        // console.log(vaccinations)
+        filterArray.forEach(function(data) {
+          data.date = Date.parse(data.date);
+        });
           //assign the otu_ids, sample_values, and otu_labels to variables to use in plot
           // var parseTime = d3.timeParse("%Y %m %d");
 
-          var newCases = result.newCases;
-          var dates = (result.date);
-          // var date = dates.push(parseTime(dates));
-          var date = Date.parse(dates)
+          // var newCases = result.newCases;
+          // var dates = (result.date);
+          // // var date = dates.push(parseTime(dates));
+          // var date = Date.parse(dates)
           
         
 
         var xScale = d3.scaleTime()
-          .domain(d3.extent(date))
+          .domain(d3.extent(filterArray, d => d.date))
           .range([0, width]);
 
         var yLinearScale1 = d3.scaleLinear()
-          .domain([0, d3.max(vaccinations)])
+          .domain([0, d3.max(filterArray, d => d.vaccinesAdministered)])
           .range([height, 0]);
 
         var yLinearScale2 = d3.scaleLinear()
-          .domain([0, d3.max(newCases)])
+          .domain([0, d3.max(filterArray, d => d.newCases)])
           .range([height, 0]);
 
         var bottomAxis = d3.axisBottom(xScale);
@@ -212,28 +215,30 @@ function myAreaChart(value) {
 
         var line1 = d3
           .line()
-          .x(d => xScale(date))
-          .y(d => yLinearScale1(vaccinations));
+          .x(d => xScale(d.date))
+          .y(d => yLinearScale1(d.vaccinesAdministered));
 
         var line2 = d3
           .line()
-          .x(xScale(date))
-          .y(d => yLinearScale2(newCases));
+          .x(d => xScale(d.date))
+          .y(d => yLinearScale2(d.newCases));
 
 
         // Append a path for line1
         chartGroup
           .append("path")
-          .data([date, vaccinations])
+          .data([filterArray])
           .attr("d", line1)
-          .attr("color", "green")
+          .attr("fill", "none")
+          .attr("stroke", "green");
 
         // Append a path for line2
         chartGroup
           .append("path")
-          .data([date, newCases])
+          .data([filterArray])
           .attr("d", line2)
-          .attr("color", "red")
+          .attr("fill", "none")
+          .attr("stroke", "red");
           
 
       }
@@ -242,6 +247,7 @@ function myAreaChart(value) {
     function optionChanged(value) {
       filteredState = myStateData.filter(d => d.state == value)
       console.log(filteredState)
+
       // myBarChart(filteredState)
       myAreaChart(value)
       gaugeChart(value)
