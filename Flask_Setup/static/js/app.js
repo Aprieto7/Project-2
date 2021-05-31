@@ -1,3 +1,4 @@
+
 var queryUrlStates = `https://api.covidactnow.org/v2/states.json?apiKey=${API_KEY}`
 var queryUrlCounties = `https://api.covidactnow.org/v2/counties.json?apiKey=${API_KEY}`
 var queryUrlCbsas = `https://api.covidactnow.org/v2/cbsas.json?apiKey=${API_KEY}`
@@ -176,8 +177,8 @@ function myAreaChart(value) {
         console.log(vaccinations)
 
           //assign the otu_ids, sample_values, and otu_labels to variables to use in plot
-          var cases = result.cases;
-          var date = result.date;
+          var newCases = result.newCases;
+          var date = (result.date).parse;
         
 
         var xLinearScale = d3.scaleLinear()
@@ -189,7 +190,7 @@ function myAreaChart(value) {
           .range([height, 0]);
 
         var yLinearScale2 = d3.scaleLinear()
-          .domain([0, d3.max(cases)])
+          .domain([0, d3.max(newCases)])
           .range([height, 0]);
 
         var bottomAxis = d3.axisBottom(xLinearScale);
@@ -212,7 +213,7 @@ function myAreaChart(value) {
         var line2 = d3
           .line()
           .x(d => xLinearScale(date))
-          .y(d => yLinearScale2(cases));
+          .y(d => yLinearScale2(newCases));
 
 
         // Append a path for line1
