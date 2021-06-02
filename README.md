@@ -30,3 +30,14 @@ Oscar Sanguino.
 * HTML file is found in the "Flask_Setup" directory. 
 * In oder to download the data and feed the html and *.js file the app.py file must be run first. This file is found in the "Data" directory
 * Numbers presented above are taken until Jun, 1, 2021.
+
+<b>Rough Breakdown of Tasks:</b>
+* Data identification
+* Data extraction 
+* Data cleanup (SQL, Pandas)
+* Data aggregation (SQL, Pandas)
+* Data analysis
+* Data visualization (D3, Plotly, Leaflet, JavaScript, HTML)
+* Summary
+* Documentation
+* Presentation
