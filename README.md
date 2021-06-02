@@ -1,5 +1,5 @@
 # Project-2
-
+![project_readme.png](project_readme.png)
 Our dashboard presents  up to date data since Feb, 2020 regarding COVID Cases and vaccination progress in the United States, including Puerto Rico and Guam.
 Source of the data is www.covidactnow.com
 
