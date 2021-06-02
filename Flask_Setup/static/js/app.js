@@ -193,38 +193,71 @@ function myBarChart(value) {
 }
 
 // Load the Visualization API and the piechart package.
-// google.charts.load('current', {'packages':['calendar']});
+google.charts.load('current', {'packages':['calendar']});
       
-// // Set a callback to run when the Google Visualization API is loaded.
-// google.charts.setOnLoadCallback(drawChart);
-  
-// function drawChart(value) {
-//   var jsonData = $.ajax({
-//       url: "/historicalData",
-//       dataType: "json",
-//       async: false
-//       }).responseText;
-//     //  console.log(jsonData) 
-//   // Create our data table out of JSON data loaded from server.
-//   var obj = JSON.parse(jsonData)
-//   console.log(obj)
-//   var state = obj.filter(d=> d.state == value)
-//   console.log(state)
-//   // function dateFilter(d){
-//   //   var parse = Date.parse(d.date)
-//   //   console.log(parse)
-//   //   var stateDate = state.filter(parse>>1609462800000)
-//   // }
-//   // obj = state.filter(Date.parse(d.date)>1609462800000).map(d=> [(d.date).date, d.vaccinesAdministered])
-//  dateFilter(state[0].date)
-//   var dataTable = new google.visualization.DataTable();
-//        dataTable.addColumn({ type: 'date', id: 'date' });
-//        dataTable.addColumn({ type: 'number', id: 'vaccinesAdministered' });
-//        dataTable.addRows(obj)
-//       console.log(dataTable);
-//   // Instantiate and draw our chart, passing in some options.
-//   var chart = new google.visualization.Calendar(document.getElementById('chart_div'));
-//   chart.draw(dataTable, {width: 1000, height: 700});
+// Set a callback to run when the Google Visualization API is loaded.
+google.charts.setOnLoadCallback(drawChart);
+
+var firstDate = "2021-01-15"; // put in the date that you want
+
+function drawChart(value) {
+
+  var jsonData = $.ajax({
+      url: "/historicalData",
+      dataType: "json",
+      async: false
+      }).responseText;
+    //  console.log(jsonData) 
+  // Create our data table out of JSON data loaded from server.
+  var obj = JSON.parse(jsonData)
+  console.log(obj[0].date);
+  var dupData = obj;
+
+  // var state = obj.filter(d=> d.state == value)
+  var objFil= {
+    state: value,
+    date: firstDate
+  };
+
+  Object.entries(objFil).forEach(([k, v]) => {
+    inpVal = v;
+    console.log (`this is k. v of filter ${k} : ${v}`);
+    dupData = dupData.filter(item => item[k] >= inpVal)
+  });
+    
+  console.log (`this is the final obj : ${dupData[0].vaccinesAdministered}`);
+  console.log (`this is the final obj : ${dupData[0].date}`);
+  // for (var i=0; i < dupData.length; i++){
+  //   console.log (`date: ${dupData[i].date} and vacAd: ${dupData[i].vaccinesAdministered}`);
+  // }
+
+ dateArr = dupData.map(item=>new Date(item.date));
+ vacAdArr = dupData.map(item=>item.vaccinesAdministered);
+//  var tableData = rows=>rows[0].map((_,c)=>rows.map(row=>row[c]))
+ zip = (...rows) => [...rows[0]].map((_, c) => rows.map(row=>row[c]))
+
+ var tableData =  zip(dateArr, vacAdArr)
+ console.log(tableData)  
+ console.log(dateArr);
+ console.log(vacAdArr);
+
+
+  // function dateFilter(d){
+  //   var parse = Date.parse(d.date)
+  //   console.log(parse)
+  //   var stateDate = state.filter(parse>>1609462800000)
+  // }
+  // obj = state.filter(Date.parse(d.date)>1609462800000).map(d=> [(d.date).date, d.vaccinesAdministered])
+
+  var dataTable = new google.visualization.DataTable();
+       dataTable.addColumn({ type: 'date', id: 'dateArr' });
+       dataTable.addColumn({ type: 'number', id: 'vacAdArr' });
+       dataTable.addRows(tableData)
+      // console.log(dataTable);
+
+  // Instantiate and draw our chart, passing in some options.
+  var chart = new google.visualization.Calendar(document.getElementById('chart_div'));
+  chart.draw(dataTable, {width: 1200, height: 800});
 
   
 
@@ -243,6 +276,7 @@ function myBarChart(value) {
 //   console.log(parse)
 //   // var stateDate = state.filter(parse>>1609462800000)
 // }
+};
 
 function optionChanged(value) {
   filteredState = myStateData.filter(d => d.state == value)
@@ -252,7 +286,7 @@ function optionChanged(value) {
   myAreaChart(value)
   gaugeChart(value)
   myBarChart(value)
-  // drawChart(value)
+  drawChart(value)
 
 
 }
@@ -267,7 +301,7 @@ function init() {
     gaugeChart("TX");
     myBarChart("TX")
     myAreaChart("TX")
-    // drawChart("TX")
+    drawChart("TX")
   });
 
   d3.json("/stateData").then((Data) => {
