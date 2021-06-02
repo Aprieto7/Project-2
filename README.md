@@ -29,4 +29,4 @@ Oscar Sanguino.
 * GitHub link contains all the files.
 * HTML file is found in the "Flask_Setup" directory. 
 * In oder to download the data and feed the html and *.js file the app.py file must be run first. This file is found in the "Data" directory
-* Numbers presented above are up taken until Jun, 1, 2021.
+* Numbers presented above are taken until Jun, 1, 2021.
