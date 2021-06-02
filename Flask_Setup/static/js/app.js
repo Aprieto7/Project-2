@@ -252,7 +252,7 @@ function optionChanged(value) {
   myAreaChart(value)
   gaugeChart(value)
   myBarChart(value)
-  drawChart(value)
+  // drawChart(value)
 
 
 }
@@ -267,7 +267,7 @@ function init() {
     gaugeChart("TX");
     myBarChart("TX")
     myAreaChart("TX")
-    drawChart("TX")
+    // drawChart("TX")
   });
 
   d3.json("/stateData").then((Data) => {
