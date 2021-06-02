@@ -192,6 +192,58 @@ function myBarChart(value) {
   });
 }
 
+// Load the Visualization API and the piechart package.
+// google.charts.load('current', {'packages':['calendar']});
+      
+// // Set a callback to run when the Google Visualization API is loaded.
+// google.charts.setOnLoadCallback(drawChart);
+  
+// function drawChart(value) {
+//   var jsonData = $.ajax({
+//       url: "/historicalData",
+//       dataType: "json",
+//       async: false
+//       }).responseText;
+//     //  console.log(jsonData) 
+//   // Create our data table out of JSON data loaded from server.
+//   var obj = JSON.parse(jsonData)
+//   console.log(obj)
+//   var state = obj.filter(d=> d.state == value)
+//   console.log(state)
+//   // function dateFilter(d){
+//   //   var parse = Date.parse(d.date)
+//   //   console.log(parse)
+//   //   var stateDate = state.filter(parse>>1609462800000)
+//   // }
+//   // obj = state.filter(Date.parse(d.date)>1609462800000).map(d=> [(d.date).date, d.vaccinesAdministered])
+//  dateFilter(state[0].date)
+//   var dataTable = new google.visualization.DataTable();
+//        dataTable.addColumn({ type: 'date', id: 'date' });
+//        dataTable.addColumn({ type: 'number', id: 'vaccinesAdministered' });
+//        dataTable.addRows(obj)
+//       console.log(dataTable);
+//   // Instantiate and draw our chart, passing in some options.
+//   var chart = new google.visualization.Calendar(document.getElementById('chart_div'));
+//   chart.draw(dataTable, {width: 1000, height: 700});
+
+  
+
+  // This is just an example of reading server side data and sending it to the client.
+  // It reads a json formatted text file and outputs it.
+  
+  
+  
+  // Instead you can query your database and parse into JSON etc etc
+  
+
+
+// }
+// function dateFilter(d){
+//   var parse = Date.parse(d.date)
+//   console.log(parse)
+//   // var stateDate = state.filter(parse>>1609462800000)
+// }
+
 function optionChanged(value) {
   filteredState = myStateData.filter(d => d.state == value)
   console.log(filteredState)
@@ -200,6 +252,7 @@ function optionChanged(value) {
   myAreaChart(value)
   gaugeChart(value)
   myBarChart(value)
+  drawChart(value)
 
 
 }
@@ -214,6 +267,7 @@ function init() {
     gaugeChart("TX");
     myBarChart("TX")
     myAreaChart("TX")
+    drawChart("TX")
   });
 
   d3.json("/stateData").then((Data) => {
@@ -228,5 +282,8 @@ function init() {
 }
 
 
-init();
+
+     
+
+init("TX");
 

@@ -2,35 +2,21 @@ from flask import Flask, render_template, jsonify
 import os.path
 import pandas as pd
 import requests as r
-# from flask_pymongo import PyMongo
 import sqlalchemy
 
+#create the engine
 engine = sqlalchemy.create_engine('sqlite:///../data/covid.db')
-# df1 = pd.read_sql_table(sqlite_table1)
-# df2 = pd.read_sql_table(sqlite_table2)
-# df1.to_sql("historical", index=False, con=engine)
-# df2.to_sql("states", index=False, con=engine)
 
-# Create an instance of Flask
+# create the flask app
 app = Flask(__name__)
 
-# Use PyMongo to establish Mongo connection
-
-
-# mongo = PyMongo(app, uri="mongodb://localhost:27017/app_name")
-
-# Route to render index.html template using data from Mongo
-
-
+# create the home route
 @app.route("/")
 def home():
 
-    # # Find one record of data from the mongo database
-
-    # # Return template and data
     return render_template("index.html")
 
-
+# create the first route for the historical data
 @app.route("/historicalData")
 def jsonified1():
 
@@ -47,7 +33,8 @@ def jsonified1():
              }
         historical.append(x)
     return jsonify(historical)
-    
+
+# create the second route for the most recent data
 @app.route("/stateData")
 def jsonified2():
     rows = engine.execute("SELECT state, cases, deaths, positiveTests, newCases, vaccinesDistributed, vaccinationsInitiated, vaccinationsCompleted, vaccinesAdministered, lat, long, population FROM states_totals_table" )
@@ -69,6 +56,7 @@ def jsonified2():
         states.append(x)
     return jsonify(states)
 
+# create the route for the map
 @app.route("/map")
 def map():
 
